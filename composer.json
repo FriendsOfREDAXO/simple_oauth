@@ -1,0 +1,7 @@
+{
+    "require": {
+        "league/oauth2-server": "^8.1",
+        "guzzlehttp/psr7": "^1.6",
+        "http-interop/http-factory-guzzle": "^1.0"
+    }
+}

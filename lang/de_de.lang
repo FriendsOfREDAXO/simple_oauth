@@ -1,0 +1,67 @@
+simple_oauth = Simple OAuth
+simple_oauth_title = Simple OAuth
+main = Übersicht
+settings = Settings
+clients = Clients
+
+simple_oauth_client = Client
+simple_oauth_token = Token
+simple_oauth_authcode = AuthCodes
+
+simple_oauth_client_uuid = UUID
+simple_oauth_client_label = Label
+simple_oauth_client_label_empty = Bitte ein Label eintragen
+simple_oauth_client_condidential = Confidentiality
+simple_oauth_client_redirect = Redirect
+simple_oauth_client_description = Beschreibung
+
+simple_oauth_client_not_found = Keine Clients gefunden
+simple_oauth_client_create = Client erstellen
+
+simple_oauth_client_user = User
+simple_oauth_client_user_notice = Optional
+
+simple_oauth_client_secret = Secret
+simple_oauth_client_secret_notice = Secret wird gehasht gespeichert und ist somit nicht wieder herstellbar
+simple_oauth_client_secret_empty = Bitte ein Secret eintragen
+
+simple_oauth_client_is_confidential = Is Confidential ?
+
+simple_oauth_client_added = Client wurde hinzugefügt
+
+simple_oauth_expiration_auth_code_time = Expiration Time AuthCode
+simple_oauth_expiration_access_code_time = Expiration Time AccessCode
+simple_oauth_expiration_refresh_code_time = Expiration Time RefreshCode
+
+simple_oauth_keys = Private und Public Key
+
+simple_oauth_privatekey_warning = Private Key fehlt
+simple_oauth_publickey_warning = Public Key fehlt
+
+simple_oauth_privatekey_warning = Private Key fehlt
+simple_oauth_publickey_warning = Public Key fehlt
+simple_oauth_privatekey_exist = Private Key ist vorhanden
+simple_oauth_publickey_exist = Public Key ist vorhanden
+
+simple_oauth_data_folder = <code>{0}</code> in den Ordner: <code>{1}</code> legen. Erstellung der Keys: {2}
+
+simple_oauth_client_deleted = Client wurde gelöscht
+simple_oauth_client_update = Clientangaben aktualisieren
+simple_oauth_client_updated = Client wurde aktualisiert
+
+create_datetime = Erstellungsdatum
+update_datetime = Letztes Update
+expires_at = Läuft ab am
+
+simple_oauth_user_id = User ID
+simple_oauth_revoke = Ungültig
+
+simple_oauth_scopes = Scopes
+simple_oauth_ycom_user = YCom-User
+simple_oauth_code = AuthCode
+simple_oauth_revoked = Ungültig
+simple_oauth_token_type = TokenTyp
+
+simple_oauth_authorize_url = Authorisierungs-URL
+simple_oauth_token_url = Token-URL
+simple_oauth_profile_url = ResourceOwnerDetail-URL

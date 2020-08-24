@@ -1,0 +1,30 @@
+package: simple_oauth
+version: '0.9'
+
+page:
+    title: 'translate:simple_oauth'
+    perm: simple_oauth[]
+    subpages:
+        settings: { title: 'translate:settings' }
+        client:
+            title: 'translate:simple_oauth_client'
+            icon: rex-icon fa-user
+            subPath: pages/data_edit.php
+            yformTable: rex_simple_oauth_client
+            yformClass: myaddon-yform
+        authcode:
+            title: 'translate:simple_oauth_authcode'
+            icon: rex-icon rex-icon-module
+            subPath: pages/data_edit.php
+            yformTable: rex_simple_oauth_authcode
+            yformClass: myaddon-yform
+        token:
+            title: 'translate:simple_oauth_token'
+            icon: rex-icon rex-icon-module
+            subPath: pages/data_edit.php
+            yformTable: rex_simple_oauth_token
+            yformClass: myaddon-yform
+
+requires:
+    packages:
+        yform: '^3'
