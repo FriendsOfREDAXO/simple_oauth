@@ -26,5 +26,7 @@ page:
             yformClass: myaddon-yform
 
 requires:
+    php:
+        version: '>=7.2.5'
     packages:
         yform: '^3'
