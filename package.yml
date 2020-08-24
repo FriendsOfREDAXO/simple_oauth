@@ -1,5 +1,5 @@
 package: simple_oauth
-version: '0.9'
+version: '0.9.1'
 
 page:
     title: 'translate:simple_oauth'
