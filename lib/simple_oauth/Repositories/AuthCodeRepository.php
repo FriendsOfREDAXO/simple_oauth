@@ -10,23 +10,26 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
 {
     public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity)
     {
-        // persist the auth code to a database
         $identifier = $authCodeEntity->getIdentifier();
-        $user_id = $authCodeEntity->getUserIdentifier();
         $client_id = $authCodeEntity->getClient()->getIdentifier();
         $scopes = $this->formatScopesForStorage($authCodeEntity->getScopes());
         $expires_at = date('Y-m-d H:i:s', $authCodeEntity->getExpiryDateTime()->getTimestamp());
 
-        \rex_simple_oauth_authcode::create()
-            ->setValue('code', $identifier)
-            ->setValue('user_id', $user_id)
-            ->setValue('client_id', $client_id)
-            ->setValue('scopes', $scopes)
-            ->setValue('revoked', 0)
-            ->setValue('expires_at', $expires_at)
-            ->save();
+        $user_identifier = $authCodeEntity->getUserIdentifier();
+        $ycom_user_login_field = \rex_config::get('ycom/auth', 'login_field');
 
-        error_log("Auth code $identifier persisted to database");
+        $UserObject = \rex_ycom_user::query()->where($ycom_user_login_field, $user_identifier)->findOne();
+
+        if ($UserObject) {
+            \rex_simple_oauth_authcode::create()
+                ->setValue('code', $identifier)
+                ->setValue('user_id', $UserObject->getId())
+                ->setValue('client_id', $client_id)
+                ->setValue('scopes', $scopes)
+                ->setValue('revoked', 0)
+                ->setValue('expires_at', $expires_at)
+                ->save();
+        }
     }
 
     public function revokeAuthCode($codeId)
