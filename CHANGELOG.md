@@ -1,6 +1,25 @@
 Changelog
 =========
 
+
+Version 0.9.2 – 24.08.2020
+--------------------------
+
+### Fehler
+
+AuthCodeRepository speicherte den User falsch.
+
+
+
+Version 0.9.1 – 24.08.2020
+--------------------------
+
+### Fehler
+
+Import der YForm Tabellen funktionierte nicht.
+
+
+
 Version 0.9 – 24.08.2020
 --------------------------
 
