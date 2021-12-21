@@ -20,13 +20,41 @@ use REDAXO\Simple_OAuth\Repositories\UserRepository;
 class Simple_OAuth
 {
     public static $basePath = '/oauth2/';
-    private static $YComUserFields = [
-        'id', 'firstname', 'name', 'email', 'ycom_groups',
+    private static $scopes = [
+        'basic' => [
+            'fields' => [
+                'id',
+                'login',
+                'email'
+            ],
+            'description' => ''
+        ],
+        'identity' => [
+            'fields' => [
+                'id',
+                'login',
+                'email',
+                'firstname',
+                'name',
+            ],
+            'description' => ''
+        ],
+        'groups' => [
+            'fields' => [
+                'ycom_groups'
+            ],
+            'description' => ''
+        ]
     ];
+
     public static $expirationTimeAuthCode = 60;
     public static $expirationTimeAccessCode = 3600 * 24 * 30;
     public static $expirationTimeRefreshCode = 3600 * 24 * 30 * 6;
 
+    /**
+     * @return false|Response|\Psr\Http\Message\ResponseInterface
+     * @throws \Exception
+     */
     public static function init()
     {
         $initObject = new self();
@@ -128,7 +156,6 @@ class Simple_OAuth
                     return $response->withStatus(500);
                 }
                 break;
-
             case 'token':
                 // Post
                 try {
@@ -140,12 +167,11 @@ class Simple_OAuth
                     return $response->withStatus(500);
                 }
                 break;
-
             case 'profile':
                 // any method
                 // own spezific call ..
                 try {
-                    $authheader = $request->getHeader('Authorization')[0];
+                    $authheader = $request->getHeader('Authorization')[0] ?? '';
                     $token = trim(str_replace('BEARER ', '', $authheader));
                     if (!$token) {
                         // extract token from request body as a fallback
@@ -186,14 +212,28 @@ class Simple_OAuth
                         $tokenObject->getValue('user_id') == $UserObject->getId()
                     ) {
                         if ($UserObject->getValue('status') > 0) {
+
+                            /* @var \rex_simple_oauth_client $client */
+                            $client = $tokenObject->getRelatedDataset('client_id');
+                            $availableScopes = self::getScopes();
+                            $ClientScopes = ('' == $client->getValue('scopes')) ? [] : explode(',', $client->getValue('scopes'));
+
                             $User = [];
-                            foreach (self::$YComUserFields as $Field) {
-                                if ('ycom_groups' == $Field) {
-                                    $User[$Field] = ('' == $UserObject->getValue($Field)) ? [] : explode(',', $UserObject->getValue($Field));
-                                } else {
-                                    $User[$Field] = $UserObject->getValue($Field);
+                            $User['id'] = $UserObject->getId();
+                            foreach ($ClientScopes as $scope) {
+                                if (array_key_exists($scope, $availableScopes)) {
+                                    foreach ($availableScopes[$scope]['fields'] as $field) {
+                                        $User[$field] = $UserObject->getValue($field);
+                                    }
                                 }
                             }
+
+                            $User = \rex_extension::registerPoint(new \rex_extension_point('SIMPLE_OAUTH_PROFILE_USER', $User, [
+                                'token' => $tokenObject,
+                                'user' => $UserObject,
+                                'request' => $request,
+                                'response' => $response,
+                            ]));
 
                             $payload = json_encode($User);
                             $response->getBody()->write($payload);
@@ -224,32 +264,76 @@ class Simple_OAuth
         }
     }
 
+    /**
+     * @return string
+     */
     public static function getPublicKey()
     {
         $file = \rex_addon::get('simple_oauth')->getDataPath('public.key');
         if (file_exists($file)) {
-            return \rex_file::get($file);
+            return (string) \rex_file::get($file);
         }
         return '';
     }
 
+    /**
+     * @return string
+     */
     public static function getPrivateKey()
     {
         $file = \rex_addon::get('simple_oauth')->getDataPath('private.key');
         if (file_exists($file)) {
-            return \rex_file::get($file);
+            return (string) \rex_file::get($file);
         }
         return '';
     }
 
+    /**
+     * @return string
+     */
     private function getCurrentPath()
     {
         $url = parse_url($_SERVER['REQUEST_URI']);
-        return $url['path'] ?? '/';
+        return (string) $url['path'] ?? '/';
     }
 
+    /**
+     * @return array|mixed|mixed[]
+     */
     public static function getEncryptionKey()
     {
-        return \rex_config::get('simple_oauth', 'encryption_key');
+        $encryptionKey = \rex_config::get('simple_oauth', 'encryption_key');
+        if ('' == $encryptionKey) {
+            \rex_config::set('simple_oauth', 'encryption_key', base64_encode(random_bytes(32)));
+            $encryptionKey = \rex_config::get('simple_oauth', 'encryption_key');
+        }
+        return $encryptionKey;
+    }
+
+    /**
+     * @param string $name
+     * @param array $fields
+     * @param string $description
+     */
+    public static function addScope(string $name, array $fields, string $description = '')
+    {
+        self::$scopes[$name] = ['fields' => $fields, 'description' => $description];
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function getScopes()
+    {
+        return self::$scopes;
+    }
+
+    public static function getYFormChoiceScopes()
+    {
+        $choices = [];
+        foreach(self::getScopes() as $scope => $_) {
+            $choices[$scope] = $scope. ' ['.implode(", ", $_['fields']).']';
+        }
+        return $choices;
     }
 }

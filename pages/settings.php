@@ -84,28 +84,28 @@ if ('' == $privateKey) {
     $n['field'][] = rex_view::success(rex_i18n::msg('simple_oauth_privatekey_exist'));
 }
 $publicKey = Simple_OAuth::getPublicKey();
-if ('' == $privateKey) {
+if ('' == $publicKey) {
     $n['field'][] = rex_view::error(rex_i18n::msg('simple_oauth_publickey_warning'));
 } else {
     $n['field'][] = rex_view::success(rex_i18n::msg('simple_oauth_publickey_exist'));
 }
 $n['field'] = implode('', $n['field']);
-$n['note'] = rex_i18n::msg('simple_oauth_data_folder', 'public.key,private.key', rex_addon::get('simple_oauth')->getDataPath(), ' https://oauth2.thephpleague.com/installation/');
+$n['note'] = rex_i18n::msg('simple_oauth_data_folder', '', rex_addon::get('simple_oauth')->getDataPath(), ' https://oauth2.thephpleague.com/installation/');
 $formElements[] = $n;
 
 $n = [];
 $n['label'] = '<label for="rex-id-lang">' . rex_i18n::msg('simple_oauth_authorize_url') . '</label>';
-$n['field'] = 'http://redaxo.localhost/oauth2/authorize';
+$n['field'] = rex::getServer().'oauth2/authorize';
 $formElements[] = $n;
 
 $n = [];
 $n['label'] = '<label for="rex-id-lang">' . rex_i18n::msg('simple_oauth_token_url') . '</label>';
-$n['field'] = 'http://redaxo.localhost/oauth2/token';
+$n['field'] = rex::getServer().'oauth2/token';
 $formElements[] = $n;
 
 $n = [];
 $n['label'] = '<label for="rex-id-lang">' . rex_i18n::msg('simple_oauth_profile_url') . '</label>';
-$n['field'] = 'http://redaxo.localhost/oauth2/profile';
+$n['field'] = rex::getServer().'oauth2/profile';
 $formElements[] = $n;
 
 $fragment = new \rex_fragment();
@@ -119,9 +119,9 @@ $formElements[] = $n;
 
 $n = [];
 $n['field'] = '<button class="btn btn-apply rex-form-aligned" type="submit" name="send" value="1"'.\rex::getAccesskey(
-        \rex_i18n::msg('update'),
-        'apply'
-    ).'>'.\rex_i18n::msg('update').'</button>';
+    \rex_i18n::msg('update'),
+    'apply'
+).'>'.\rex_i18n::msg('update').'</button>';
 $formElements[] = $n;
 
 $fragment = new \rex_fragment();

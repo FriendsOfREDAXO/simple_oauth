@@ -1,12 +1,5 @@
 <?php
 
-// info:
-// base url darf nicht anders von redaxo genutzt werden. /oauth2/
-
-// Fehlende Optionen, noch nötig ?
-// - client credential grant
-// - scopes erstellen, und anmelden können. Z.B. YForm mit Rest API.. function und dieses meldet Filter in der API an
-
 rex_yform_manager_dataset::setModelClass('rex_simple_oauth_client', rex_simple_oauth_client::class);
 rex_yform_manager_dataset::setModelClass('rex_simple_oauth_token', rex_simple_oauth_token::class);
 rex_yform_manager_dataset::setModelClass('rex_simple_oauth_authcode', rex_simple_oauth_authcode::class);
@@ -27,7 +20,8 @@ rex_extension::register(
                 rex_sql::factory()->setQuery('update rex_simple_oauth_client set secret = :secret where id = :id', ['secret' => $secret, 'id' => $data_id]);
             }
         }
-    });
+    }
+);
 
 if (rex::isFrontend()) {
     rex_extension::register(
@@ -39,7 +33,8 @@ if (rex::isFrontend()) {
                 // if (500 == $response->getStatusCode()) { dump($response); exit; }
                 // if (302 == $response->getStatusCode()) { dump($response); exit; }
 
-                $http_line = sprintf('HTTP/%s %s %s',
+                $http_line = sprintf(
+                    'HTTP/%s %s %s',
                     $response->getProtocolVersion(),
                     $response->getStatusCode(),
                     $response->getReasonPhrase()

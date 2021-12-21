@@ -43,7 +43,7 @@ simple_oauth_publickey_warning = Public Key fehlt
 simple_oauth_privatekey_exist = Private Key ist vorhanden
 simple_oauth_publickey_exist = Public Key ist vorhanden
 
-simple_oauth_data_folder = <code>{0}</code> in den Ordner: <code>{1}</code> legen. Erstellung der Keys: {2}
+simple_oauth_data_folder = <code>private.key</code> und <code>public.key</code> in den Ordner: <code>{1}</code> legen.
 
 simple_oauth_client_deleted = Client wurde gelöscht
 simple_oauth_client_update = Clientangaben aktualisieren
@@ -65,3 +65,5 @@ simple_oauth_token_type = TokenTyp
 simple_oauth_authorize_url = Authorisierungs-URL
 simple_oauth_token_url = Token-URL
 simple_oauth_profile_url = ResourceOwnerDetail-URL
+
+simple_oauth_docs_intro = Einführung

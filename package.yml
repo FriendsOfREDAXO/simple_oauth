@@ -1,5 +1,5 @@
 package: simple_oauth
-version: '0.9.2'
+version: '1.0'
 
 page:
     title: 'translate:simple_oauth'
@@ -9,22 +9,22 @@ page:
         client:
             title: 'translate:simple_oauth_client'
             icon: rex-icon fa-user
-            subPath: pages/data_edit.php
-            yformTable: rex_simple_oauth_client
-            yformClass: myaddon-yform
         authcode:
             title: 'translate:simple_oauth_authcode'
             icon: rex-icon rex-icon-module
-            subPath: pages/data_edit.php
-            yformTable: rex_simple_oauth_authcode
-            yformClass: myaddon-yform
         token:
             title: 'translate:simple_oauth_token'
             icon: rex-icon rex-icon-module
-            subPath: pages/data_edit.php
-            yformTable: rex_simple_oauth_token
-            yformClass: myaddon-yform
+        docs:
+            title: 'Hilfe'
+            pjax: false
+            itemclass: pull-right
+            subpages:
+                intro:
+                    title: 'translate:simple_oauth_docs_intro'
+                    pjax: false
+                    subPath: docs/intro.md
 
 requires:
     packages:
-        yform: '^3'
+        yform: '>=4.0-dev,<5.0.0-dev'
