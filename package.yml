@@ -26,5 +26,7 @@ page:
                     subPath: docs/intro.md
 
 requires:
+    php:
+        version: '>=7.2.5'
     packages:
         yform: '>=4.0-dev,<5.0.0-dev'
