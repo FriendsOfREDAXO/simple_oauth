@@ -1,6 +1,17 @@
 Changelog
 =========
 
+Version 1.0 - 21.12.2021
+--------------------------
+
+### Anpassungen
+
+* Encryptionkey wird nun auch "on the fly" generiert wenn nicht vorhanden
+* Scopes sind nun erweiterbar und werden in Profilpage beachtet
+* Doku nun sehr viel ausführlicher
+* Verwaltung der Tabellen nun ohne falsche Darstellung
+
+
 
 Version 0.9.2 – 24.08.2020
 --------------------------
