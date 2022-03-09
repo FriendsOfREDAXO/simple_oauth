@@ -67,3 +67,5 @@ simple_oauth_token_url = Token-URL
 simple_oauth_profile_url = ResourceOwnerDetail-URL
 
 simple_oauth_docs_intro = Einführung
+
+simple_oauth_settings_saved = Einstellungen wurden gespeichert
