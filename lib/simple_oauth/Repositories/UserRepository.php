@@ -12,7 +12,8 @@ class UserRepository implements UserRepositoryInterface
     {
         try {
             $user = new UserEntity();
-            $user->setIdentifier(\rex_ycom_user::getMe()->getValue('email'));
+            $ycom_user_login_field = \rex_config::get('ycom/auth', 'login_field');
+            $user->setIdentifier(\rex_ycom_user::getMe()->getValue($ycom_user_login_field));
             return $user;
         } catch (\Exception $exception) {
             return null;
