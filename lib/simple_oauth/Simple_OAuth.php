@@ -47,7 +47,7 @@ class Simple_OAuth
         ]
     ];
 
-    public static $expirationTimeAuthCode = 60;
+    public static $expirationTimeAuthCode = 600;
     public static $expirationTimeAccessCode = 3600 * 24 * 30;
     public static $expirationTimeRefreshCode = 3600 * 24 * 30 * 6;
 
