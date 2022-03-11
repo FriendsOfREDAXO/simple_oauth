@@ -75,7 +75,7 @@ Mit dem erstellten Client mit der ID (client_id) und dem sich gemerkten (secret)
 
 ### Authorization Grant (Variante 1)
 
-Hiermit wird eine Anfrage mit der client id und dem secret erstellt mit welcher man auf die YCom Loginseite geleitet wird, mit einem Redirekt, welcher dann URL des beim Client eingetragenen URL leitet. Zu dieser URL wird ein code=[code] angefügt, mit welchem man dann weitere Abfragen macht. Scope ist bisher nicht implementiert. Ein State Parameter kann auch übergeben werden und wird entsprechend auch beim redirect weitergegeben.
+Hiermit wird eine Anfrage mit der client id erstellt mit welcher man auf die YCom Loginseite geleitet wird, mit einem Redirekt, welcher dann URL des beim Client eingetragenen URL leitet. Zu dieser URL wird ein code=[code] angefügt, mit welchem man dann weitere Abfragen macht. Scope ist bisher nicht implementiert. Ein State Parameter kann auch übergeben werden und wird entsprechend auch beim redirect weitergegeben. Dieser dient für den anfragenden zur Überprüfung und sollte auch eine Ablaufzeit haben
 
 #### Hole den AuthCode (Step 1/2)
 
@@ -88,7 +88,6 @@ http://[domain]]/oauth2/authorize?
 response_type=code&
 grant_type=authorize&
 client_id=[id]&
-client_secret=[client_secret]&
 scope=&
 state=[optional]&
 ```
