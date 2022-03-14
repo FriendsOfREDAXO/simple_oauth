@@ -1,6 +1,17 @@
 Changelog
 =========
 
+Version 1.0.1 - 14.03.2022
+--------------------------
+
+### Korrekturen
+
+* Beim login_field aus ycom wurde nur die email beachtet. Nun geht das ausgewählte Feld
+* Default Expire des AuthCodes war default nur auf 1min gesetzt, was in der Verwaltung nicht ersichtlich war
+* Fehlende Texte und CS
+
+
+
 Version 1.0 - 21.12.2021
 --------------------------
 
