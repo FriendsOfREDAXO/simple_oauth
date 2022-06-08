@@ -18,9 +18,11 @@ class ComposerStaticInit9d85b3d6ea6faaf233054aa7f9eb9702
         ),
         'L' => 
         array (
+            'League\\Uri\\' => 11,
             'League\\OAuth2\\Server\\' => 21,
             'League\\Event\\' => 13,
             'Lcobucci\\JWT\\' => 13,
+            'Lcobucci\\Clock\\' => 15,
         ),
         'H' => 
         array (
@@ -42,6 +44,11 @@ class ComposerStaticInit9d85b3d6ea6faaf233054aa7f9eb9702
             0 => __DIR__ . '/..' . '/psr/http-factory/src',
             1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
+        'League\\Uri\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/uri-interfaces/src',
+            1 => __DIR__ . '/..' . '/league/uri/src',
+        ),
         'League\\OAuth2\\Server\\' => 
         array (
             0 => __DIR__ . '/..' . '/league/oauth2-server/src',
@@ -53,6 +60,10 @@ class ComposerStaticInit9d85b3d6ea6faaf233054aa7f9eb9702
         'Lcobucci\\JWT\\' => 
         array (
             0 => __DIR__ . '/..' . '/lcobucci/jwt/src',
+        ),
+        'Lcobucci\\Clock\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lcobucci/clock/src',
         ),
         'Http\\Factory\\Guzzle\\' => 
         array (
@@ -68,11 +79,16 @@ class ComposerStaticInit9d85b3d6ea6faaf233054aa7f9eb9702
         ),
     );
 
+    public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+    );
+
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit9d85b3d6ea6faaf233054aa7f9eb9702::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit9d85b3d6ea6faaf233054aa7f9eb9702::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9d85b3d6ea6faaf233054aa7f9eb9702::$classMap;
 
         }, null, ClassLoader::class);
     }

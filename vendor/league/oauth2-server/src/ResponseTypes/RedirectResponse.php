@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) Alex Bilbie
  * @license     http://mit-license.org/
  *
- * @see        https://github.com/thephpleague/oauth2-server
+ * @link        https://github.com/thephpleague/oauth2-server
  */
 
 namespace League\OAuth2\Server\ResponseTypes;
@@ -29,6 +29,8 @@ class RedirectResponse extends AbstractResponseType
     }
 
     /**
+     * @param ResponseInterface $response
+     *
      * @return ResponseInterface
      */
     public function generateHttpResponse(ResponseInterface $response)
