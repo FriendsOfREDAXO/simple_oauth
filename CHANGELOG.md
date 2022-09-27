@@ -1,7 +1,7 @@
 Changelog
 =========
 
-Version 1.0.2 - 14.03.2022
+Version 1.0.2 - 27.09.2022
 --------------------------
 
 * Composer update
