@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '431d2f0e7baf94a0c1a211738c96a4d68193b3a4',
+    'reference' => 'c26ba37c119bc71a9a0857fbb1af483cf1729fd2',
     'name' => '__root__',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '431d2f0e7baf94a0c1a211738c96a4d68193b3a4',
+      'reference' => 'c26ba37c119bc71a9a0857fbb1af483cf1729fd2',
     ),
     'defuse/php-encryption' => 
     array (
@@ -31,12 +31,12 @@
     ),
     'guzzlehttp/psr7' => 
     array (
-      'pretty_version' => '1.8.5',
-      'version' => '1.8.5.0',
+      'pretty_version' => '1.9.0',
+      'version' => '1.9.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '337e3ad8e5716c15f9657bd214d16cc5e69df268',
+      'reference' => 'e98e3e6d4f86621a9b75f623996e6bbdeb4b9318',
     ),
     'http-interop/http-factory-guzzle' => 
     array (
@@ -49,21 +49,21 @@
     ),
     'lcobucci/clock' => 
     array (
-      'pretty_version' => '2.0.0',
-      'version' => '2.0.0.0',
+      'pretty_version' => '2.2.0',
+      'version' => '2.2.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '353d83fe2e6ae95745b16b3d911813df6a05bfb3',
+      'reference' => 'fb533e093fd61321bfcbac08b131ce805fe183d3',
     ),
     'lcobucci/jwt' => 
     array (
-      'pretty_version' => '4.1.5',
-      'version' => '4.1.5.0',
+      'pretty_version' => '4.2.1',
+      'version' => '4.2.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'fe2d89f2eaa7087af4aa166c6f480ef04e000582',
+      'reference' => '72ac6d807ee51a70ad376ee03a2387e8646e10f3',
     ),
     'league/event' => 
     array (
@@ -92,12 +92,12 @@
     ),
     'league/uri' => 
     array (
-      'pretty_version' => '6.6.0',
-      'version' => '6.6.0.0',
+      'pretty_version' => '6.8.0',
+      'version' => '6.8.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '4147f19b9de3b5af6a258f35d7a0efbbf9963298',
+      'reference' => 'a700b4656e4c54371b799ac61e300ab25a2d1d39',
     ),
     'league/uri-interfaces' => 
     array (
@@ -164,6 +164,15 @@
       array (
       ),
       'reference' => '120b605dfeb996808c31b6477290a714d356e822',
+    ),
+    'stella-maris/clock' => 
+    array (
+      'pretty_version' => '0.1.5',
+      'version' => '0.1.5.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '447879c53ca0b2a762cdbfba5e76ccf4deca9158',
     ),
   ),
 );

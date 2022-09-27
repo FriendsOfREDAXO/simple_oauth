@@ -12,6 +12,10 @@ class ComposerStaticInit9d85b3d6ea6faaf233054aa7f9eb9702
     );
 
     public static $prefixLengthsPsr4 = array (
+        'S' => 
+        array (
+            'StellaMaris\\Clock\\' => 18,
+        ),
         'P' => 
         array (
             'Psr\\Http\\Message\\' => 17,
@@ -39,6 +43,10 @@ class ComposerStaticInit9d85b3d6ea6faaf233054aa7f9eb9702
     );
 
     public static $prefixDirsPsr4 = array (
+        'StellaMaris\\Clock\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stella-maris/clock/src',
+        ),
         'Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-factory/src',
@@ -46,8 +54,8 @@ class ComposerStaticInit9d85b3d6ea6faaf233054aa7f9eb9702
         ),
         'League\\Uri\\' => 
         array (
-            0 => __DIR__ . '/..' . '/league/uri-interfaces/src',
-            1 => __DIR__ . '/..' . '/league/uri/src',
+            0 => __DIR__ . '/..' . '/league/uri/src',
+            1 => __DIR__ . '/..' . '/league/uri-interfaces/src',
         ),
         'League\\OAuth2\\Server\\' => 
         array (
