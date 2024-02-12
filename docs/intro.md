@@ -92,6 +92,28 @@ scope=&
 state=[optional]&
 ```
 
+
+#### LoginFormular für Authorization Grant
+
+Dieses Formular über YForm in einem Artikel erstellen und über die Settings das Formular entsprechend zuweisen. 
+
+```
+objparams|form_method|get|
+
+hidden|response_type|response_type|REQUEST
+hidden|grant_type|grant_type|REQUEST
+hidden|client_id|client_id|REQUEST
+hidden|client_secret|client_secret|REQUEST
+hidden|state|state|REQUEST
+
+validate|ycom_auth|login|psw|auth|{{ login_info }}|{{ login_failed }}
+text|login|{{ mitgliedsnummer }}: <span class="form-required-sign">*</span>|#attributes:{"autocomplete":"username"}
+password|psw|{{ password }}: <span class="form-required-sign">*</span>|#attributes:{"autocomplete":"current-password"}
+
+action|callback|\REDAXO\Simple_OAuth\Simple_OAuth::authorizeGrant|pre
+```
+
+
 ##### Response
 
 Weiterleitung auf
@@ -210,9 +232,7 @@ Authorization = [access_token]
     "ycom_groups": "1"
 }
 ```
-
-
-### Hilfereiche Links
+## Hilfereiche Links
 
 * https://www.oauth.com/playground/
 * https://oauth2.thephpleague.com/

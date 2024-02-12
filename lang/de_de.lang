@@ -69,3 +69,4 @@ simple_oauth_profile_url = ResourceOwnerDetail-URL
 simple_oauth_docs_intro = Einführung
 
 simple_oauth_settings_saved = Einstellungen wurden gespeichert
+simple_oauth_authorize_login_article_id = Login ArticleID für Authorize

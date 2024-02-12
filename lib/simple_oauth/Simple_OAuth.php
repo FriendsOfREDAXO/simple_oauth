@@ -19,15 +19,17 @@ use REDAXO\Simple_OAuth\Repositories\UserRepository;
 
 class Simple_OAuth
 {
+    public const FORCE_NOTHING = 0;
+    public const FORCE_AUTHORIZE = 1;
     public static $basePath = '/oauth2/';
     private static $scopes = [
         'basic' => [
             'fields' => [
                 'id',
                 'login',
-                'email'
+                'email',
             ],
-            'description' => ''
+            'description' => '',
         ],
         'identity' => [
             'fields' => [
@@ -37,14 +39,14 @@ class Simple_OAuth
                 'firstname',
                 'name',
             ],
-            'description' => ''
+            'description' => '',
         ],
         'groups' => [
             'fields' => [
-                'ycom_groups'
+                'ycom_groups',
             ],
-            'description' => ''
-        ]
+            'description' => '',
+        ],
     ];
 
     public static $expirationTimeAuthCode = 600;
@@ -52,13 +54,13 @@ class Simple_OAuth
     public static $expirationTimeRefreshCode = 3600 * 24 * 30 * 6;
 
     /**
-     * @return false|Response|\Psr\Http\Message\ResponseInterface
      * @throws \Exception
+     * @return false|Response|\Psr\Http\Message\ResponseInterface
      */
-    public static function init()
+    public static function init($forceGrant = self::FORCE_NOTHING)
     {
         $initObject = new self();
-        if (substr($initObject->getCurrentPath(), 0, \strlen(self::$basePath)) != self::$basePath) {
+        if (self::FORCE_NOTHING == $forceGrant && substr($initObject->getCurrentPath(), 0, \strlen(self::$basePath)) != self::$basePath) {
             return false;
         }
 
@@ -83,6 +85,7 @@ class Simple_OAuth
             $initObject->getEncryptionKey()
         );
 
+        // authorize grant
         $authCodeGrant = new AuthCodeGrant(
             $authCodeRepository,
             $refreshTokenRepository,
@@ -91,10 +94,10 @@ class Simple_OAuth
         $authCodeGrant->setRefreshTokenTTL(new \DateInterval('PT'.$ExpirationTimeRefreshCode.'S')); // P1M - refresh tokens will expire after 1 month
         $server->enableGrantType($authCodeGrant, new \DateInterval('PT'.$ExpirationTimeAccessCode.'S')); // PT1H = access tokens will expire after 1 hour
 
+        // refresh grant
         $refreshTokenGrant = new RefreshTokenGrant(
             $refreshTokenRepository
         );
-
         $server->enableGrantType($refreshTokenGrant, new \DateInterval('PT'.$ExpirationTimeAccessCode.'S')); // PT1H = access tokens will expire after 1 hour
 
         /* legacy */
@@ -116,45 +119,38 @@ class Simple_OAuth
         $response = new Response();
 
         $currentPathAsArray = explode('/', $request->getUri()->getPath());
+
+        if (self::FORCE_AUTHORIZE == $forceGrant || 'authorize' == $currentPathAsArray[2]) {
+
+            try {
+                $authRequest = $server->validateAuthorizationRequest($request);
+                $queryParams = $request->getQueryParams() ?? [];
+
+                if (null === \rex_ycom_user::getMe()) {
+                    $loginUrl = rex_getUrl(\rex_config::get('simple_oauth', 'authorize_login_article_id'), '', $queryParams, '&');
+                    \rex_response::sendRedirect($loginUrl);
+                }
+
+                $userRepository = new UserRepository();
+                $user = $userRepository->getCurrentUserEntity();
+                $authRequest->setUser($user);
+                $authRequest->setAuthorizationApproved(true);
+
+                return $server->completeAuthorizationRequest($authRequest, $response);
+            } catch (OAuthServerException $exception) {
+                return $exception->generateHttpResponse($response);
+            } catch (\rex_sql_exception $exception) {
+                $response->getBody()->write('Error in OAuth. Code: rsqle');
+                return $response->withStatus(500);
+            } catch (\Exception $exception) {
+                $response->getBody()->write('Error in OAuth. Code: geces '.$exception->getMessage());
+                return $response->withStatus(500);
+            }
+
+        }
+
         switch ($currentPathAsArray[2]) {
             case 'authorize':
-                try {
-                    // get
-                    // ist hier dafür da, um Informationen für das Login zu verwenden. z.B. Logo oder ähnliches
-                    if (@$_SESSION['Simple_OAuth_AuthRequest']) {
-                        $authRequest = $_SESSION['Simple_OAuth_AuthRequest']; // unserialize(\rex_ycom_auth::getSessionVar('Simple_OAuth_AuthRequest'));
-                    } else {
-                        $authRequest = $server->validateAuthorizationRequest($request);
-                    }
-
-                    $_SESSION['Simple_OAuth_AuthRequest'] = $authRequest;
-
-                    if (null == $ycomUser = \rex_ycom_user::getMe()) {
-                        $loginUrl = rex_getUrl(\rex_config::get('ycom/auth', 'article_id_login'), '', [
-                            'returnTo' => self::$basePath.'authorize',
-                        ]);
-                        \rex_response::sendRedirect($loginUrl);
-                        die();
-                    }
-
-                    unset($_SESSION['Simple_OAuth_AuthRequest']);
-
-                    $userRepository = new UserRepository();
-                    $user = $userRepository->getCurrentUserEntity();
-                    $authRequest->setUser($user);
-                    $authRequest->setAuthorizationApproved(true);
-
-                    return $server->completeAuthorizationRequest($authRequest, $response);
-                } catch (OAuthServerException $exception) {
-                    \rex_ycom_auth::unsetSessionVar('Simple_OAuth_AuthRequest');
-                    return $exception->generateHttpResponse($response);
-                } catch (\rex_sql_exception $exception) {
-                    $response->getBody()->write('Error in OAuth. Code: rsqle');
-                    return $response->withStatus(500);
-                } catch (\Exception $exception) {
-                    $response->getBody()->write('Error in OAuth. Code: geces '.$exception->getMessage());
-                    return $response->withStatus(500);
-                }
                 break;
             case 'token':
                 // Post
@@ -208,12 +204,12 @@ class Simple_OAuth
                     $UserObject = \rex_ycom_user::query()->where($ycom_user_login_field, $user_identifier)->findOne();
 
                     if (
-                        $UserObject &&
-                        $tokenObject->getValue('user_id') == $UserObject->getId()
+                        $UserObject
+                        && $tokenObject->getValue('user_id') == $UserObject->getId()
                     ) {
                         if ($UserObject->getValue('status') > 0) {
 
-                            /* @var \rex_simple_oauth_client $client */
+                            /** @var \rex_simple_oauth_client $client */
                             $client = $tokenObject->getRelatedDataset('client_id');
                             $availableScopes = self::getScopes();
                             $ClientScopes = ('' == $client->getValue('scopes')) ? [] : explode(',', $client->getValue('scopes'));
@@ -221,7 +217,7 @@ class Simple_OAuth
                             $User = [];
                             $User['id'] = $UserObject->getId();
                             foreach ($ClientScopes as $scope) {
-                                if (array_key_exists($scope, $availableScopes)) {
+                                if (\array_key_exists($scope, $availableScopes)) {
                                     foreach ($availableScopes[$scope]['fields'] as $field) {
                                         $User[$field] = $UserObject->getValue($field);
                                     }
@@ -310,11 +306,6 @@ class Simple_OAuth
         return $encryptionKey;
     }
 
-    /**
-     * @param string $name
-     * @param array $fields
-     * @param string $description
-     */
     public static function addScope(string $name, array $fields, string $description = '')
     {
         self::$scopes[$name] = ['fields' => $fields, 'description' => $description];
@@ -331,9 +322,47 @@ class Simple_OAuth
     public static function getYFormChoiceScopes()
     {
         $choices = [];
-        foreach(self::getScopes() as $scope => $_) {
-            $choices[$scope] = $scope. ' ['.implode(", ", $_['fields']).']';
+        foreach (self::getScopes() as $scope => $_) {
+            $choices[$scope] = $scope. ' ['.implode(', ', $_['fields']).']';
         }
         return $choices;
+    }
+
+    public static function authorizeGrant()
+    {
+        $response = self::init(self::FORCE_AUTHORIZE);
+        if (false !== $response) {
+            self::sendResponse($response);
+        }
+
+    }
+
+    public static function sendResponse($response)
+    {
+        /* var $response GuzzleHttp\Psr7\Response */
+
+        // if (500 == $response->getStatusCode()) { dump($response); exit; }
+        // if (302 == $response->getStatusCode()) { dump($response); exit; }
+
+        $http_line = sprintf(
+            'HTTP/%s %s %s',
+            $response->getProtocolVersion(),
+            $response->getStatusCode(),
+            $response->getReasonPhrase()
+        );
+        header($http_line, true, $response->getStatusCode());
+        foreach ($response->getHeaders() as $name => $values) {
+            foreach ($values as $value) {
+                header("$name: $value", false);
+            }
+        }
+        $stream = $response->getBody();
+        if ($stream->isSeekable()) {
+            $stream->rewind();
+        }
+        while (!$stream->eof()) {
+            echo $stream->read(1024 * 8);
+        }
+        exit;
     }
 }

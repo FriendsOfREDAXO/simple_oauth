@@ -28,32 +28,9 @@ if (rex::isFrontend()) {
         'PACKAGES_INCLUDED',
         static function ($params) {
             if (false !== $response = \REDAXO\Simple_OAuth\Simple_OAuth::init()) {
-                /* var $response GuzzleHttp\Psr7\Response */
-
-                // if (500 == $response->getStatusCode()) { dump($response); exit; }
-                // if (302 == $response->getStatusCode()) { dump($response); exit; }
-
-                $http_line = sprintf(
-                    'HTTP/%s %s %s',
-                    $response->getProtocolVersion(),
-                    $response->getStatusCode(),
-                    $response->getReasonPhrase()
-                );
-                header($http_line, true, $response->getStatusCode());
-                foreach ($response->getHeaders() as $name => $values) {
-                    foreach ($values as $value) {
-                        header("$name: $value", false);
-                    }
+                if (false !== $response) {
+                    \REDAXO\Simple_OAuth\Simple_OAuth::sendResponse($response);
                 }
-                $stream = $response->getBody();
-                if ($stream->isSeekable()) {
-                    $stream->rewind();
-                }
-                while (!$stream->eof()) {
-                    echo $stream->read(1024 * 8);
-                }
-
-                exit;
             }
         },
         rex_extension::LATE

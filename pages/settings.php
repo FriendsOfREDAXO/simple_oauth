@@ -1,28 +1,24 @@
 <?php
 
-/*
- * noch nachrüsten ?
- * Enable implicit grant (checkbox)
- * Can be uses insecure ..
+/**
+ * simple_oauth.
+ *
+ * @package redaxo\simple_oauth
+ *
+ * @var rex_plugin $this
  */
+
 
 use REDAXO\Simple_OAuth\Simple_OAuth;
 
 $func = rex_request('func', 'string');
 
 if ('update' == $func) {
-    $this->setConfig(
-        rex_post(
-            'simple_oauth',
-            [
-                [
-                    'expiration_time_auth_code', 'integer',
-                    'expiration_time_access_code', 'integer',
-                    'expiration_time_refresh_code', 'integer',
-                ],
-            ]
-        )
-    );
+
+    $this->setConfig('expiration_time_auth_code', rex_post('simple_oauth')['expiration_time_auth_code']);
+    $this->setConfig('expiration_time_access_code', rex_post('simple_oauth')['expiration_time_access_code']);
+    $this->setConfig('expiration_time_refresh_code', rex_post('simple_oauth')['expiration_time_refresh_code']);
+    $this->setConfig('authorize_login_article_id', rex_post('simple_oauth')['authorize_login_article_id']);
 
     echo rex_view::success($this->i18n('settings_saved'));
 }
@@ -72,6 +68,11 @@ $formElements[] = $n;
 $n = [];
 $n['label'] = '<label for="rex-id-lang">' . rex_i18n::msg('simple_oauth_expiration_refresh_code_time') . '</label>';
 $n['field'] = $selRefresh->get();
+$formElements[] = $n;
+
+$n = [];
+$n['label'] = '<label for="rex-id-lang">' . rex_i18n::msg('simple_oauth_authorize_login_article_id') . '</label>';
+$n['field'] = '<input class="form-control" type="text" name="simple_oauth[authorize_login_article_id]" value="'.$this->getConfig('authorize_login_article_id', 0).'" />';
 $formElements[] = $n;
 
 $n = [];
